@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.AdministratorsMapper">
+  <resultMap id="AdminBaseResultMap" type="entities.Administrators">
+    <id column="aid" jdbcType="INTEGER" property="aid" />
+    <result column="aname" jdbcType="VARCHAR" property="aname" />
+    <result column="asex" jdbcType="VARCHAR" property="asex" />
+    <result column="apassword" jdbcType="VARCHAR" property="apassword" />
+    <result column="deptid" jdbcType="INTEGER" property="deptid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    aid, aname, asex, apassword, deptid
+  </sql>
+  <select id="selectByExample" parameterType="entities.AdministratorsExample" resultMap="AdminBaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from administrators
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="AdminBaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from administrators
+    where aid = #{aid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from administrators
+    where aid = #{aid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="entities.AdministratorsExample">
+    delete from administrators
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="entities.Administrators">
+    <selectKey keyProperty="aid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into administrators (aname, asex, apassword, 
+      deptid)
+    values (#{aname,jdbcType=VARCHAR}, #{asex,jdbcType=VARCHAR}, #{apassword,jdbcType=VARCHAR}, 
+      #{deptid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="entities.Administrators">
+    <selectKey keyProperty="aid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into administrators
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aname != null">
+        aname,
+      </if>
+      <if test="asex != null">
+        asex,
+      </if>
+      <if test="apassword != null">
+        apassword,
+      </if>
+      <if test="deptid != null">
+        deptid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aname != null">
+        #{aname,jdbcType=VARCHAR},
+      </if>
+      <if test="asex != null">
+        #{asex,jdbcType=VARCHAR},
+      </if>
+      <if test="apassword != null">
+        #{apassword,jdbcType=VARCHAR},
+      </if>
+      <if test="deptid != null">
+        #{deptid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="entities.AdministratorsExample" resultType="java.lang.Long">
+    select count(*) from administrators
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update administrators
+    <set>
+      <if test="record.aid != null">
+        aid = #{record.aid,jdbcType=INTEGER},
+      </if>
+      <if test="record.aname != null">
+        aname = #{record.aname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asex != null">
+        asex = #{record.asex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apassword != null">
+        apassword = #{record.apassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptid != null">
+        deptid = #{record.deptid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update administrators
+    set aid = #{record.aid,jdbcType=INTEGER},
+      aname = #{record.aname,jdbcType=VARCHAR},
+      asex = #{record.asex,jdbcType=VARCHAR},
+      apassword = #{record.apassword,jdbcType=VARCHAR},
+      deptid = #{record.deptid,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="entities.Administrators">
+    update administrators
+    <set>
+      <if test="aname != null">
+        aname = #{aname,jdbcType=VARCHAR},
+      </if>
+      <if test="asex != null">
+        asex = #{asex,jdbcType=VARCHAR},
+      </if>
+      <if test="apassword != null">
+        apassword = #{apassword,jdbcType=VARCHAR},
+      </if>
+      <if test="deptid != null">
+        deptid = #{deptid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where aid = #{aid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entities.Administrators">
+    update administrators
+    set aname = #{aname,jdbcType=VARCHAR},
+      asex = #{asex,jdbcType=VARCHAR},
+      apassword = #{apassword,jdbcType=VARCHAR},
+      deptid = #{deptid,jdbcType=INTEGER}
+    where aid = #{aid,jdbcType=INTEGER}
+  </update>
+</mapper>
